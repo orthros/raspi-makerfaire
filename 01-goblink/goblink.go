@@ -16,7 +16,7 @@ func main() {
     for parseErr != nil {
         fmt.Println("Sorry we didnt recognize \"" + text + "\" as an integer. Please try again")
         fmt.Println("Please enter time interval in seconds: ")
-        fmt.Scanln(text)
+        fmt.Scanln(&text)
         seconds, parseErr = strconv.Atoi(text)
     }
 
