@@ -60,8 +60,7 @@ func pinWorker(seconds int, done chan<- bool) {
 
     ticker := time.NewTicker(time.Second * time.Duration(seconds))
     for range ticker.C {
-        //Do some work with the pins???
-        fmt.Println("Tick")
+        //fmt.Println("Tick")
         pin.Toggle();
     }
     done<- true
