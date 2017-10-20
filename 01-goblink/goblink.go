@@ -1,6 +1,8 @@
 package main
 
 import "os"
+import "os/signal"
+import "syscall"
 import "fmt"
 import "time"
 import "strconv"
@@ -43,6 +45,18 @@ func pinWorker(seconds int, done chan<- bool) {
     //Physical pin 19
     pin := rpio.Pin(10)
     pin.Output()
+
+    sigc := make(chan os.Signal, 1)
+    signal.Notify(sigc,
+                  syscall.SIGINT,
+                  syscall.SIGTERM,
+                  syscall.SIGQUIT)
+    go func() {
+            <-sigc
+            pin.Low()
+            rpio.Close()
+            done<- true
+    }()
 
     ticker := time.NewTicker(time.Second * time.Duration(seconds))
     for range ticker.C {
