@@ -1,11 +1,11 @@
 package main
 
-//import "os"
+import "os"
 import "fmt"
 import "time"
 import "strconv"
 
-//import "github.com/stianeikeland/go-rpio"
+import "github.com/stianeikeland/go-rpio"
 
 func main() {
     fmt.Println("Please enter time interval in seconds: ")
@@ -33,19 +33,22 @@ func main() {
 func pinWorker(seconds int, done chan<- bool) {
     fmt.Println("Starting pinWorker with interval " + strconv.Itoa(seconds))
 
-    //err := rpio.Open()
-    //if err != nil {
-    //    fmt.Println(err)
-    //    os.Exit(1)
-    //}
-    //defer rpio.Close()
+    err := rpio.Open()
+    if err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }
+    defer rpio.Close()
 
-    //pin := rpio.Pin(10)
+    //Physical pin 19
+    pin := rpio.Pin(10)
+    pin.Output()
+
     ticker := time.NewTicker(time.Second * time.Duration(seconds))
     for range ticker.C {
         //Do some work with the pins???
-        fmt.Println("Hey there")
-        //pin.Toggle();
+        fmt.Println("Tick")
+        pin.Toggle();
     }
     done<- true
 }
